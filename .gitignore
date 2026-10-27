@@ -1,6 +1,33 @@
-node_modules
-dist
-out
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+out/
+dist/
+release/
+*.log
+
+# SQLite database files
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# macOS
 .DS_Store
-.eslintcache
-*.log*
+
+# IDE local settings
+.vscode/settings.json
+.vscode/*.code-workspace
+
+# Temporary files
+*.tmp
+*.bak
