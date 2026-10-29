@@ -1,14 +1,16 @@
+import Sidebar from './Components/Layout/Sidebar'
+
 function App(): React.JSX.Element {
   return (
-    <main className="min-h-screen bg-[#0b1220] p-8 text-[#f1f5f9]">
-      <h1 className="text-3xl font-bold">GarageIQ</h1>
+    <div className="flex h-screen overflow-hidden bg-[#0b1220] text-[#f1f5f9]">
+      <Sidebar />
 
-      <p className="mt-3 text-[#94a3b8]">Vehicle Maintenance Management</p>
+      <main className="min-w-0 flex-1 overflow-y-auto p-8">
+        <h1 className="text-3xl font-bold">GarageIQ</h1>
 
-      <div className="mt-8 rounded-xl border border-[#253244] bg-[#151e2b] p-6">
-        Dark theme initialized successfully.
-      </div>
-    </main>
+        <p className="mt-3 text-[#94a3b8]">Vehicle Maintenance Management</p>
+      </main>
+    </div>
   )
 }
 
