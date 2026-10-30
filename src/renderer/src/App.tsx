@@ -1,5 +1,6 @@
 import Sidebar from './Components/Layout/Sidebar'
 import Topbar from './Components/Layout/Topbar'
+import Dashboard from './Pages/Dashboard'
 
 function App(): React.JSX.Element {
   return (
@@ -14,9 +15,7 @@ function App(): React.JSX.Element {
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto p-8">
-          <h1 className="text-3xl font-bold">GarageIQ</h1>
-
-          <p className="mt-3 text-[#94a3b8]">Vehicle Maintenance Management</p>
+          <Dashboard />
         </main>
       </div>
     </div>
