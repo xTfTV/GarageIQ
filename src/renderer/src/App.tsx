@@ -2,6 +2,7 @@ import AppLayout from './Components/Layout/AppLayout'
 import Dashboard from './Pages/Dashboard'
 import Maintenance from './Pages/Maintenance'
 import Vehicles from './Pages/Vehicles'
+import Reminder from './Pages/Reminders'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 
 function App(): React.JSX.Element {
@@ -33,6 +34,15 @@ function App(): React.JSX.Element {
             </AppLayout>
           }
           path="/Maintenance"
+        ></Route>
+
+        <Route
+          element={
+            <AppLayout>
+              <Reminder />
+            </AppLayout>
+          }
+          path="/Reminder"
         ></Route>
       </Routes>
     </HashRouter>
