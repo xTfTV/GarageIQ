@@ -4,6 +4,7 @@ import Maintenance from './Pages/Maintenance'
 import Vehicles from './Pages/Vehicles'
 import Reminder from './Pages/Reminders'
 import { HashRouter, Route, Routes } from 'react-router-dom'
+import Reports from './Pages/Reports'
 
 function App(): React.JSX.Element {
   return (
@@ -43,6 +44,15 @@ function App(): React.JSX.Element {
             </AppLayout>
           }
           path="/Reminder"
+        ></Route>
+
+        <Route
+          element={
+            <AppLayout>
+              <Reports />
+            </AppLayout>
+          }
+          path="/Reports"
         ></Route>
       </Routes>
     </HashRouter>
