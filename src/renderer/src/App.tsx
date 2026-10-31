@@ -5,6 +5,7 @@ import Vehicles from './Pages/Vehicles'
 import Reminder from './Pages/Reminders'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import Reports from './Pages/Reports'
+import Setting from './Pages/Settings'
 
 function App(): React.JSX.Element {
   return (
@@ -53,6 +54,15 @@ function App(): React.JSX.Element {
             </AppLayout>
           }
           path="/Reports"
+        ></Route>
+
+        <Route
+          element={
+            <AppLayout>
+              <Setting />
+            </AppLayout>
+          }
+          path="/Settings"
         ></Route>
       </Routes>
     </HashRouter>
