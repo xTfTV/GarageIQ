@@ -3,7 +3,7 @@ import Dashboard from './Pages/Dashboard'
 import Maintenance from './Pages/Maintenance'
 import Vehicles from './Pages/Vehicles'
 import Reminder from './Pages/Reminders'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import { HashRouter, Route, Routes, Navigate } from 'react-router-dom'
 import Reports from './Pages/Reports'
 import Setting from './Pages/Settings'
 
@@ -64,6 +64,9 @@ function App(): React.JSX.Element {
           }
           path="/Settings"
         ></Route>
+
+        {/* Redirect unrecognized routes to Dashboard */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HashRouter>
   )
