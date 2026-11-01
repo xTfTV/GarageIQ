@@ -1,15 +1,52 @@
 import { useState } from 'react'
 import { Bell, Search, ChevronDown, X } from 'lucide-react'
+import { useLocation } from 'react-router-dom'
+
+const pageInformation: Record<string, { title: string; subtitle: string }> = {
+  '/': {
+    title: 'Dashboard',
+    subtitle: 'Garage Overview'
+  },
+  '/vehicles': {
+    title: 'Vehicles',
+    subtitle: 'Manage Your Garage'
+  },
+  '/maintenance': {
+    title: 'Maintenance',
+    subtitle: 'Service History & Maintenance'
+  },
+  '/reminder': {
+    title: 'Reminder',
+    subtitle: 'Upcoming Maintenance'
+  },
+  '/reports': {
+    title: 'Reports',
+    subtitle: 'Vehicle Analytics'
+  },
+  '/settings': {
+    title: 'Settings',
+    subtitle: 'Application Preferences'
+  }
+}
 
 function Topbar(): React.JSX.Element {
   const [showMobileSearch, setShowMobileSearch] = useState(false)
+
+  const location = useLocation()
+
+  const currentPage = pageInformation[location.pathname] ?? {
+    title: 'GarageIQ',
+    subtitle: 'Vehicle Management'
+  }
 
   return (
     <header className="relative flex h-20 shrink-0 items-center justify-between gap-3 border-b border-[#253244] bg-[#151e2b] px-4 sm:px-6 lg:px-8">
       {/* Current page */}
       <div className="min-w-0">
-        <h2 className="truncate text-base font-semibold text-[#f1f5f9] sm:text-lg">Dashboard</h2>
-        <p className="hidden text-xs text-[#94a3b8] sm:block">Garage Overview</p>
+        <h2 className="truncate text-base font-semibold text-[#f1f5f9] sm:text-lg">
+          {currentPage.title}
+        </h2>
+        <p className="hidden text-xs text-[#94a3b8] sm:block">{currentPage.subtitle}</p>
       </div>
 
       {/* Right controls */}
