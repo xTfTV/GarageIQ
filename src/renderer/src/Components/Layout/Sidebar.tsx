@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard,
   CarFront,
@@ -17,11 +18,31 @@ type SidebarProps = {
 }
 
 const navigationItems = [
-  { label: 'Dashboard', icon: LayoutDashboard },
-  { label: 'Vehicles', icon: CarFront },
-  { label: 'Maintenance', icon: Wrench },
-  { label: 'Reminder', icon: CalendarClock },
-  { label: 'Reports', icon: ChartNoAxesColumn }
+  {
+    label: 'Dashboard',
+    path: '/',
+    icon: LayoutDashboard
+  },
+  {
+    label: 'Vehicles',
+    path: '/vehicles',
+    icon: CarFront
+  },
+  {
+    label: 'Maintenance',
+    path: '/maintenance',
+    icon: Wrench
+  },
+  {
+    label: 'Reminder',
+    path: '/reminder',
+    icon: CalendarClock
+  },
+  {
+    label: 'Reports',
+    path: '/reports',
+    icon: ChartNoAxesColumn
+  }
 ]
 
 function Sidebar({ collapsed, onToggle, onClose }: SidebarProps): React.JSX.Element {
@@ -43,8 +64,15 @@ function Sidebar({ collapsed, onToggle, onClose }: SidebarProps): React.JSX.Elem
 
   const showOverlay = isSmallWindow && !collapsed
 
+  const handleNavigation = (): void => {
+    if (isSmallWindow && !collapsed) {
+      onClose()
+    }
+  }
+
   return (
     <>
+      {/* Small-window overlay */}
       {showOverlay && (
         <button
           type="button"
@@ -59,11 +87,12 @@ function Sidebar({ collapsed, onToggle, onClose }: SidebarProps): React.JSX.Elem
           collapsed ? 'w-18' : 'w-64'
         } ${showOverlay ? 'fixed inset-y-0 left-0 z-40 shadow-2xl' : 'relative'}`}
       >
-        {/* Branding */}
+        {/* GarageIQ branding */}
         <div className="flex h-20 shrink-0 items-center justify-between border-b border-[#253244] px-4">
           {!collapsed && (
             <div className="flex min-w-0 items-center gap-2">
               <CarFront size={25} className="shrink-0 text-[#14b8a6]" />
+
               <span className="truncate text-xl font-bold">GarageIQ</span>
             </div>
           )}
@@ -79,42 +108,55 @@ function Sidebar({ collapsed, onToggle, onClose }: SidebarProps): React.JSX.Elem
           </button>
         </div>
 
-        {/* Main navigation */}
+        {/* Application navigation */}
         <nav aria-label="Main navigation" className="min-h-0 flex-1 space-y-1 overflow-y-auto p-3">
           {!collapsed && <p className="mb-3 px-3 text-xs font-semibold text-[#94a3b8]">MAIN</p>}
 
           {navigationItems.map((item, index) => {
             const Icon = item.icon
+
+            // Temporary active styling.
+            // Dynamic highlighting belongs to Issue #9.
             const isActive = index === 0
 
             return (
-              <div
-                key={item.label}
+              <NavLink
+                key={item.path}
+                to={item.path}
+                onClick={handleNavigation}
                 title={collapsed ? item.label : undefined}
                 aria-label={item.label}
-                aria-current={isActive ? 'page' : undefined}
-                className={`flex items-center rounded-lg py-3 ${
+                className={`flex w-full items-center rounded-lg py-3 transition-colors ${
                   collapsed ? 'justify-center px-2' : 'gap-3 px-3'
-                } ${isActive ? 'bg-[#203a40] font-medium text-[#14b8a6]' : 'text-[#94a3b8]'}`}
+                } ${
+                  isActive
+                    ? 'bg-[#203a40] font-medium text-[#14b8a6]'
+                    : 'text-[#94a3b8] hover:bg-[#1e293b] hover:text-white'
+                }`}
               >
                 <Icon size={19} className="shrink-0" />
+
                 {!collapsed && <span className="truncate text-sm">{item.label}</span>}
-              </div>
+              </NavLink>
             )
           })}
         </nav>
 
-        {/* Settings */}
+        {/* Settings navigation */}
         <div className="shrink-0 border-t border-[#253244] p-3">
-          <div
+          <NavLink
+            to="/settings"
+            onClick={handleNavigation}
             title={collapsed ? 'Settings' : undefined}
-            className={`flex items-center rounded-lg py-3 text-[#94a3b8] ${
+            aria-label="Settings"
+            className={`flex w-full items-center rounded-lg py-3 text-[#94a3b8] transition-colors hover:bg-[#1e293b] hover:text-white ${
               collapsed ? 'justify-center px-2' : 'gap-3 px-3'
             }`}
           >
             <Settings size={19} className="shrink-0" />
+
             {!collapsed && <span className="truncate text-sm">Settings</span>}
-          </div>
+          </NavLink>
         </div>
       </aside>
     </>
