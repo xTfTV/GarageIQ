@@ -112,27 +112,26 @@ function Sidebar({ collapsed, onToggle, onClose }: SidebarProps): React.JSX.Elem
         <nav aria-label="Main navigation" className="min-h-0 flex-1 space-y-1 overflow-y-auto p-3">
           {!collapsed && <p className="mb-3 px-3 text-xs font-semibold text-[#94a3b8]">MAIN</p>}
 
-          {navigationItems.map((item, index) => {
+          {navigationItems.map((item) => {
             const Icon = item.icon
-
-            // Temporary active styling.
-            // Dynamic highlighting belongs to Issue #9.
-            const isActive = index === 0
 
             return (
               <NavLink
                 key={item.path}
                 to={item.path}
+                end={item.path === '/'}
                 onClick={handleNavigation}
                 title={collapsed ? item.label : undefined}
                 aria-label={item.label}
-                className={`flex w-full items-center rounded-lg py-3 transition-colors ${
-                  collapsed ? 'justify-center px-2' : 'gap-3 px-3'
-                } ${
-                  isActive
-                    ? 'bg-[#203a40] font-medium text-[#14b8a6]'
-                    : 'text-[#94a3b8] hover:bg-[#1e293b] hover:text-white'
-                }`}
+                className={({ isActive }) =>
+                  `flex w-full items-center rounded-lg py-3 transition-colors ${
+                    collapsed ? 'justify-center px-2' : 'gap-3 px-3'
+                  } ${
+                    isActive
+                      ? 'bg-[#203a40] font-medium text-[#14b8a6]'
+                      : 'text-[#94a3b8] hover:bg-[#1e293b] hover:text-white'
+                  }`
+                }
               >
                 <Icon size={19} className="shrink-0" />
 
@@ -149,9 +148,11 @@ function Sidebar({ collapsed, onToggle, onClose }: SidebarProps): React.JSX.Elem
             onClick={handleNavigation}
             title={collapsed ? 'Settings' : undefined}
             aria-label="Settings"
-            className={`flex w-full items-center rounded-lg py-3 text-[#94a3b8] transition-colors hover:bg-[#1e293b] hover:text-white ${
-              collapsed ? 'justify-center px-2' : 'gap-3 px-3'
-            }`}
+            className={({ isActive }) =>
+              `flex w-full items-center rounded-lg py-3 text-[#94a3b8] transition-colors hover:bg-[#1e293b] hover:text-white ${
+                collapsed ? 'justify-center px-2' : 'gap-3 px-3'
+              } ${isActive ? 'bg-[#203a40] font-medium text-[14b8a6]' : 'text-[#94a3b8] hover:bg-[#1e293b] hover:text-white'}`
+            }
           >
             <Settings size={19} className="shrink-0" />
 
