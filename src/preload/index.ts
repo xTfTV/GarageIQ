@@ -1,22 +1,30 @@
-import { contextBridge } from 'electron'
-import { electronAPI } from '@electron-toolkit/preload'
+import { contextBridge, ipcRenderer } from 'electron'
+import { IPC_CHANNELS, type GarageIQApi } from '../shared/garageIQApi'
 
-// Custom APIs for renderer
-const api = {}
+// Approved GarageIQ APIs exposed to the renderer
+const garageIQApi: GarageIQApi = {
+  vehicles: {
+    getByUserId: (userId: number) => ipcRenderer.invoke(IPC_CHANNELS.VEHICLES_BY_USER, userId),
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
+    getById: (vehicleId: number, userId: number) =>
+      ipcRenderer.invoke(IPC_CHANNELS.VEHICLE_BY_ID, vehicleId, userId)
+  },
+
+  serviceTypes: {
+    getAllActive: () => ipcRenderer.invoke(IPC_CHANNELS.SERVICE_TYPES_ALL),
+
+    getById: (serviceTypeId: number) =>
+      ipcRenderer.invoke(IPC_CHANNELS.SERVICE_TYPE_BY_ID, serviceTypeId)
+  }
+}
+
+// Expose only approved APIs to React
 if (process.contextIsolated) {
   try {
-    contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('api', api)
+    contextBridge.exposeInMainWorld('garageIQ', garageIQApi)
   } catch (error) {
-    console.error(error)
+    console.error('[GarageIQ] Failed to expose API:', error)
   }
 } else {
-  // @ts-ignore (define in dts)
-  window.electron = electronAPI
-  // @ts-ignore (define in dts)
-  window.api = api
+  window.garageIQ = garageIQApi
 }
