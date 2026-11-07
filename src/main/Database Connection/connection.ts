@@ -2,19 +2,19 @@ import Database from 'better-sqlite3'
 import { app } from 'electron'
 import { existsSync, mkdirSync } from 'node:fs'
 import { join, resolve } from 'node:path'
+import { runMigrations } from './migration'
 
 let database: Database.Database | null = null
 
 /**
- * Determine the SQLitedatabase location
+ * Determine the SQLite database location.
  *
  * Development:
- *  GarageIQ/database/garageiq.db
+ *   GarageIQ/Database/garageiq.db
  *
  * Production:
- *  Electron userData/database/garageiq.db
+ *   Electron userData/Database/garageiq.db
  */
-
 function getDatabasePath(): string {
   if (!app.isPackaged) {
     return resolve(app.getAppPath(), '..', 'Database', 'garageiq.db')
@@ -27,8 +27,9 @@ function getDatabasePath(): string {
   return join(databaseDirectory, 'garageiq.db')
 }
 
-/* Initialize the SQLite connection for GarageIQ */
-
+/**
+ * Initialize the SQLite connection for GarageIQ.
+ */
 export function initializeDatabase(): Database.Database {
   if (database?.open) {
     return database
@@ -37,7 +38,7 @@ export function initializeDatabase(): Database.Database {
   const databasePath = getDatabasePath()
 
   if (!existsSync(databasePath)) {
-    throw new Error(`GarageIQ database was not found in path: ${databasePath}`)
+    throw new Error(`GarageIQ database was not found at: ${databasePath}`)
   }
 
   try {
@@ -45,29 +46,40 @@ export function initializeDatabase(): Database.Database {
       fileMustExist: true
     })
 
-    // Enforce the fk constraint
-    connection.pragma('foreign_keys = ON')
+    try {
+      // Enable foreign key enforcement.
+      connection.pragma('foreign_keys = ON')
 
-    // Verify the db can execute queries
-    const result = connection.prepare('SELECT 1 AS connected').get() as { connected: number }
+      // Run pending database migrations.
+      runMigrations(connection)
 
-    if (result.connected !== 1) {
-      throw new Error(`SQLite connection verification failed`)
+      // Verify that SQLite can execute queries.
+      const result = connection.prepare('SELECT 1 AS connected').get() as { connected: number }
+
+      if (result.connected !== 1) {
+        throw new Error('SQLite connection verification failed')
+      }
+
+      database = connection
+
+      console.log('[GarageIQ] SQLite database connected successfully')
+      console.log(`[GarageIQ] Database path: ${databasePath}`)
+
+      return connection
+    } catch (error) {
+      // Clean up if initialization or migrations fail.
+      connection.close()
+      throw error
     }
-
-    database = connection
-
-    console.log('[GarageIQ] SQLite Database connected successfully.')
-    console.log(`[GarageIQ] Database Path: ${databasePath}`)
-
-    return connection
   } catch (error) {
-    console.error('[GarageIQ] SQLite connection failed: ', error)
+    console.error('[GarageIQ] SQLite connection failed:', error)
     throw error
   }
 }
 
-/* Return the active DB connection */
+/**
+ * Return the active database connection.
+ */
 export function getDatabase(): Database.Database {
   if (!database?.open) {
     throw new Error('GarageIQ database has not been initialized')
@@ -76,9 +88,11 @@ export function getDatabase(): Database.Database {
   return database
 }
 
-/* Close the active DB connection */
+/**
+ * Close the active database connection.
+ */
 export function closeDatabase(): void {
-  if (!database?.open) {
+  if (database?.open) {
     database.close()
     console.log('[GarageIQ] SQLite database connection closed')
   }
