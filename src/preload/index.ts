@@ -15,6 +15,10 @@ const garageIQApi: GarageIQApi = {
 
     getById: (serviceTypeId: number) =>
       ipcRenderer.invoke(IPC_CHANNELS.SERVICE_TYPE_BY_ID, serviceTypeId)
+  },
+
+  database: {
+    checkHealth: () => ipcRenderer.invoke(IPC_CHANNELS.DATABASE_HEALTH)
   }
 }
 
