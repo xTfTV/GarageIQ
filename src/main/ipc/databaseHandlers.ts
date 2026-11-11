@@ -2,6 +2,7 @@ import { ipcMain, type BrowserWindow, type IpcMainInvokeEvent } from 'electron'
 import { VehicleRepository } from '../Database Connection/Repositories/VehicleRepository'
 import { ServiceTypeRepository } from '../Database Connection/Repositories/ServiceTypeRepository'
 import { IPC_CHANNELS } from '../../shared/garageIQApi'
+import { getDatabase } from '../Database Connection/connection'
 
 function validateId(value: unknown, field: string): number {
   if (typeof value !== 'number' || !Number.isSafeInteger(value) || value <= 0) {
@@ -65,5 +66,25 @@ export function registerDatabaseIpcHandlers(mainWindow: BrowserWindow): void {
     validateSender(event, mainWindow)
 
     return safeOperation('get actuve service types', () => serviceTypeRepository.findAllActive())
+  })
+
+  ipcMain.handle(IPC_CHANNELS.DATABASE_HEALTH, (event) => {
+    validateSender(event, mainWindow)
+
+    return safeOperation('check database health', () => {
+      const database = getDatabase()
+
+      const result = database.prepare('SELECT 1 AS connected').get() as { connected: number }
+
+      const schemaVersion = database.pragma('user_version', { simple: true }) as number
+
+      const foreignKeys = database.pragma('foreign_keys', { simple: true }) as number
+
+      return {
+        connected: result.connected === 1,
+        schemaVersion,
+        foreignKeysEnabled: foreignKeys === 1
+      }
+    })
   })
 }
