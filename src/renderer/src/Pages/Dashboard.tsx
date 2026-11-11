@@ -1,4 +1,5 @@
 import { CarFront, CalendarClock, Wrench, Wallet } from 'lucide-react'
+import DatabaseDiagnostics from '../Components/Development/DatabaseDiagnostics'
 
 const stats = [
   { label: 'Total Vehicles', value: '0', icon: CarFront },
@@ -41,6 +42,8 @@ function Dashboard(): React.JSX.Element {
           Your vehicles and maintenance activity will appear here
         </p>
       </section>
+
+      {import.meta.env.DEV && <DatabaseDiagnostics />}
     </div>
   )
 }
