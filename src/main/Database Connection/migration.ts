@@ -131,7 +131,9 @@ function readSqlFile(folder: 'schema' | 'seeds', filename: string): string {
     throw new Error('Packaged SQL migration assets have not been configured yet')
   }
 
-  const filePath = resolve(app.getAppPath(), '..', 'Database', folder, filename)
+  const directory = folder == 'schema' ? 'Schema' : 'Seeds'
+
+  const filePath = resolve(app.getAppPath(), 'Database', directory, filename)
 
   const sql = readFileSync(filePath, 'utf8')
 

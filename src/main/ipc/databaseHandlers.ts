@@ -62,6 +62,16 @@ export function registerDatabaseIpcHandlers(mainWindow: BrowserWindow): void {
     )
   })
 
+  ipcMain.handle(IPC_CHANNELS.SERVICE_TYPE_BY_ID, (event, serviceTypeId: unknown) => {
+    validateSender(event, mainWindow)
+
+    const validId = validateId(serviceTypeId, 'ServiceTypeId')
+
+    return safeOperation('get service type by ID', () => {
+      return serviceTypeRepository.findById(validId)
+    })
+  })
+
   ipcMain.handle(IPC_CHANNELS.SERVICE_TYPES_ALL, (event) => {
     validateSender(event, mainWindow)
 

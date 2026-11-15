@@ -1,8 +1,5 @@
 
 
--- Drop the table if it exists ** SCRIPT SHOULD ONLY BE RAN ONCE **
-DROP TABLE IF EXISTS Users;
-
 -- Create the Users table
 CREATE TABLE IF NOT EXISTS Users
 (
