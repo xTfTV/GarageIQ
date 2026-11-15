@@ -1,7 +1,4 @@
 
--- Drop the table if it exists ** SCRIPT SHOULD ONLY BE RAN ONCE **
-DROP TABLE IF EXISTS Vehicles;
-
 -- Create the Vehicle table
 CREATE TABLE IF NOT EXISTS Vehicles
 (

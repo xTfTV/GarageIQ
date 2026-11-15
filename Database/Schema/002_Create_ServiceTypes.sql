@@ -1,7 +1,4 @@
 
--- Drop the table if it exists ** SCRIPT SHOULD ONLY BE RAN ONCE **
-DROP TABLE IF EXISTS ServiceTypes;
-
 -- Creating the ServiceTypes table
 CREATE TABLE IF NOT EXISTS ServiceTypes
 (

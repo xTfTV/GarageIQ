@@ -1,7 +1,4 @@
 
--- Drop the table if it exists ** SCRIPT SHOULD ONLY BE RAN ONCE **
-DROP TABLE IF EXISTS MaintenanceRecord;
-
 -- Creating the MaintenanceRecord table
 CREATE TABLE IF NOT EXISTS MaintenanceRecord
 (
