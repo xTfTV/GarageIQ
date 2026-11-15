@@ -6,68 +6,71 @@ import Reminder from './Pages/Reminders'
 import { HashRouter, Route, Routes, Navigate } from 'react-router-dom'
 import Reports from './Pages/Reports'
 import Setting from './Pages/Settings'
+import RegistrationGate from './Components/Setup/RegistrationGate'
 
 function App(): React.JSX.Element {
   return (
     <HashRouter>
-      <Routes>
-        <Route
-          element={
-            <AppLayout>
-              <Dashboard />
-            </AppLayout>
-          }
-          path="/"
-        />
+      <RegistrationGate>
+        <Routes>
+          <Route
+            element={
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            }
+            path="/"
+          />
 
-        <Route
-          element={
-            <AppLayout>
-              <Vehicles />
-            </AppLayout>
-          }
-          path="/Vehicles"
-        ></Route>
+          <Route
+            element={
+              <AppLayout>
+                <Vehicles />
+              </AppLayout>
+            }
+            path="/Vehicles"
+          ></Route>
 
-        <Route
-          element={
-            <AppLayout>
-              <Maintenance />
-            </AppLayout>
-          }
-          path="/Maintenance"
-        ></Route>
+          <Route
+            element={
+              <AppLayout>
+                <Maintenance />
+              </AppLayout>
+            }
+            path="/Maintenance"
+          ></Route>
 
-        <Route
-          element={
-            <AppLayout>
-              <Reminder />
-            </AppLayout>
-          }
-          path="/Reminder"
-        ></Route>
+          <Route
+            element={
+              <AppLayout>
+                <Reminder />
+              </AppLayout>
+            }
+            path="/Reminder"
+          ></Route>
 
-        <Route
-          element={
-            <AppLayout>
-              <Reports />
-            </AppLayout>
-          }
-          path="/Reports"
-        ></Route>
+          <Route
+            element={
+              <AppLayout>
+                <Reports />
+              </AppLayout>
+            }
+            path="/Reports"
+          ></Route>
 
-        <Route
-          element={
-            <AppLayout>
-              <Setting />
-            </AppLayout>
-          }
-          path="/Settings"
-        ></Route>
+          <Route
+            element={
+              <AppLayout>
+                <Setting />
+              </AppLayout>
+            }
+            path="/Settings"
+          ></Route>
 
-        {/* Redirect unrecognized routes to Dashboard */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Redirect unrecognized routes to Dashboard */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </RegistrationGate>
     </HashRouter>
   )
 }
