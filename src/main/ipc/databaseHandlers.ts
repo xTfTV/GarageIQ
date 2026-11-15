@@ -3,6 +3,8 @@ import { VehicleRepository } from '../Database Connection/Repositories/VehicleRe
 import { ServiceTypeRepository } from '../Database Connection/Repositories/ServiceTypeRepository'
 import { IPC_CHANNELS } from '../../shared/garageIQApi'
 import { getDatabase } from '../Database Connection/connection'
+import { UserRepository } from '../Database Connection/Repositories/UserRepository'
+import type { RegisterUserRequest } from '../../shared/garageIQApi'
 
 function validateId(value: unknown, field: string): number {
   if (typeof value !== 'number' || !Number.isSafeInteger(value) || value <= 0) {
@@ -36,6 +38,7 @@ function safeOperation<T>(operation: string, callback: () => T): T {
 export function registerDatabaseIpcHandlers(mainWindow: BrowserWindow): void {
   const vehicleRepository = new VehicleRepository()
   const serviceTypeRepository = new ServiceTypeRepository()
+  const userRepository = new UserRepository()
 
   // Replace the existing handlers when Electron recreates
   // the application window
@@ -96,5 +99,24 @@ export function registerDatabaseIpcHandlers(mainWindow: BrowserWindow): void {
         foreignKeysEnabled: foreignKeys === 1
       }
     })
+  })
+
+  ipcMain.handle(IPC_CHANNELS.USERS_HAS_ACCOUNT, (event) => {
+    validateSender(event, mainWindow)
+
+    return safeOperation('check local account', () => userRepository.hasLocalAccount())
+  })
+
+  ipcMain.handle(IPC_CHANNELS.USERS_REGISTER, async (event, input: RegisterUserRequest) => {
+    validateSender(event, mainWindow)
+
+    try {
+      return await userRepository.register(input)
+    } catch (error) {
+      console.error('[GarageIQ] User registration failed: ', error)
+
+      // Keep database details out of the renderer
+      throw new Error('Unable to complete registration', { cause: error })
+    }
   })
 }
