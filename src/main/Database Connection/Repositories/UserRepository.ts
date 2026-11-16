@@ -118,10 +118,6 @@ export class UserRepository {
 
     validateRegistration(normalized)
 
-    if (this.hasLocalAccount()) {
-      throw new Error('Local account setup is already complete')
-    }
-
     const existing = this.database
       .prepare(
         `
@@ -146,10 +142,6 @@ export class UserRepository {
 
     const createUser = this.database.transaction(() => {
       // Prevent duplicate registration after an asynchronous
-      // password-hashing operation
-      if (this.hasLocalAccount()) {
-        throw new Error('Local account setup is already complete')
-      }
 
       const result = this.database
         .prepare(

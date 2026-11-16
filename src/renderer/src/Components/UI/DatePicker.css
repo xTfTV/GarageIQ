@@ -1,0 +1,124 @@
+.garageiq-calendar {
+  color: #f1f5f9;
+  min-width: 310px;
+  max-width: calc(100vw - 48px);
+}
+
+.garageiq-calendar .rdp-root {
+  --rdp-accent-color: #14b8a6;
+  --rdp-accent-background-color: #203a40;
+  --rdp-day-height: 38px;
+  --rdp-day-width: 38px;
+  --rdp-day_button-height: 36px;
+  --rdp-day_button-width: 36px;
+  --rdp-day_button-border-radius: 10px;
+  --rdp-selected-border: none;
+  --rdp-disabled-opacity: 0.3;
+  --rdp-outside-opacity: 0.25;
+  margin: 0;
+}
+
+.garageiq-calendar .rdp-month_caption {
+  margin-bottom: 14px;
+}
+
+.garageiq-calendar .rdp-dropdowns {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.garageiq-calendar .rdp-dropdown_root {
+  border: 1px solid #253244;
+  border-radius: 8px;
+  background: #0b1220;
+  color: #f1f5f9;
+  padding: 7px 9px;
+}
+
+.garageiq-calendar .rdp-dropdown_root:hover {
+  border-color: #14b8a6;
+}
+
+.garageiq-calendar .rdp-dropdown {
+  cursor: pointer;
+}
+
+.garageiq-calendar .rdp-caption_label {
+  color: #f1f5f9;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.garageiq-calendar .rdp-dropdown option {
+  color: #f1f5f9;
+  background: #151e2b;
+}
+
+.garageiq-calendar .rdp-chevron {
+  fill: #14b8a6;
+}
+
+.garageiq-calendar .rdp-button_previous,
+.garageiq-calendar .rdp-button_next {
+  color: #14b8a6;
+  border-radius: 8px;
+}
+
+.garageiq-calendar .rdp-button_previous:hover,
+.garageiq-calendar .rdp-button_next:hover {
+  background: #203a40;
+}
+
+.garageiq-calendar .rdp-weekday {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.garageiq-calendar .rdp-day_button {
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.garageiq-calendar .rdp-day_button:hover:not(:disabled) {
+  background: #203a40;
+  color: #2dd4bf;
+}
+
+.garageiq-calendar .rdp-selected .rdp-day_button {
+  background: #14b8a6;
+  color: #0b1220;
+  font-weight: 700;
+}
+
+.garageiq-calendar .rdp-today:not(.rdp-selected) .rdp-day_button {
+  color: #14b8a6;
+  font-weight: 700;
+}
+
+.garageiq-calendar .rdp-disabled .rdp-day_button {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.garageiq-calendar .rdp-day_button:focus-visible,
+.garageiq-calendar .rdp-dropdown:focus-visible {
+  outline: 2px solid #14b8a6;
+  outline-offset: 2px;
+}
+
+@media (max-width: 420px) {
+  .garageiq-calendar {
+    padding: 10px;
+    min-width: 285px;
+  }
+
+  .garageiq-calendar .rdp-root {
+    --rdp-day-height: 34px;
+    --rdp-day-width: 34px;
+    --rdp-day_button-height: 32px;
+    --rdp-day_button-width: 32px;
+  }
+}

@@ -1,6 +1,7 @@
 import { useState, type SubmitEvent } from 'react'
 import { CarFront, UserPlus } from 'lucide-react'
 import type { RegisterUserRequest } from '../../../shared/garageIQApi'
+import DatePicker from '../Components/UI/DatePicker'
 
 interface RegisterProps {
   onRegistered: () => void
@@ -65,13 +66,6 @@ function Register({ onRegistered }: RegisterProps): React.JSX.Element {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const now = new Date()
-  const maxDob = [
-    now.getFullYear(),
-    String(now.getMonth() + 1).padStart(2, '0'),
-    String(now.getDate()).padStart(2, '0')
-  ].join('-')
-
   function updateField(field: keyof RegisterUserRequest, value: string): void {
     setForm((previous) => ({
       ...previous,
@@ -82,6 +76,11 @@ function Register({ onRegistered }: RegisterProps): React.JSX.Element {
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault()
     setError('')
+
+    if (!form.dob) {
+      setError('Please select your date of birth')
+      return
+    }
 
     if (form.password !== confirmPassword) {
       setError('Passwords do not match')
@@ -123,20 +122,39 @@ function Register({ onRegistered }: RegisterProps): React.JSX.Element {
         <form onSubmit={(event) => void handleSubmit(event)} className="space-y-6">
           <div className="grid gap-5 sm:grid-cols-2">
             {fields.map((field) => (
-              <label key={field.name} className="block space-y-2">
-                <span className="text-sm font-medium text-[#cbd5e1]">{field.label}</span>
+              <div key={field.name} className="min-w-0 space-y-2">
+                <label
+                  htmlFor={`register-${field.name}`}
+                  className="block text-sm font-medium text-[#cbd5e1]"
+                >
+                  {field.label}
+                </label>
 
-                <input
-                  type={field.type}
-                  required
-                  autoComplete={field.autocomplete}
-                  max={field.name === 'dob' ? maxDob : undefined}
-                  minLength={field.name === 'password' ? 12 : undefined}
-                  value={form[field.name]}
-                  onChange={(event) => updateField(field.name, event.target.value)}
-                  className="w-full rounded-xl border border-[#253244] bg-[#0b1220] px-4 py-3 text-sm text-white outline-none transition focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20"
-                />
-              </label>
+                {field.name === 'dob' ? (
+                  <DatePicker
+                    id="register-dob"
+                    value={form.dob}
+                    onChange={(value) => updateField('dob', value)}
+                    maxDate={new Date()}
+                    placeholder="Select your date of birth"
+                  />
+                ) : (
+                  <input
+                    id={`register-${field.name}`}
+                    type={field.type}
+                    required
+                    autoComplete={field.autocomplete}
+                    minLength={field.name === 'password' ? 12 : undefined}
+                    value={form[field.name]}
+                    onChange={(event) => updateField(field.name, event.target.value)}
+                    className="w-full rounded-xl border border-[#253244] bg-[#0b1220] px-4 py-3 text-sm text-white outline-none transition focus:border-[#14b8a6] focus:ring-2 focus:ring-[#14b8a6]/20"
+                  />
+                )}
+
+                {field.name === 'password' && (
+                  <p className="text-xs text-[#64748b]">Minimum 12 characters</p>
+                )}
+              </div>
             ))}
           </div>
 
@@ -154,7 +172,10 @@ function Register({ onRegistered }: RegisterProps): React.JSX.Element {
           </label>
 
           {error && (
-            <p role="alert" className="rounded-lg border border-red-900 p-3 text-sm text-red-400">
+            <p
+              role="alert"
+              className="rounded-xl border border-red-900/70 bg-red-950/30 p-3 text-sm text-red-400"
+            >
               {error}
             </p>
           )}
@@ -162,9 +183,10 @@ function Register({ onRegistered }: RegisterProps): React.JSX.Element {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#14b8a6] px-5 py-3 font-semibold text-[#0b1220] transition-colors hover:bg-[#2dd4bf] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#14b8a6] px-5 py-3 font-semibold text-[#0b1220] transition-colors hover:bg-[#2dd4bf] disabled:cursor-not-allowed disabled:opacity-50"
           >
             <UserPlus size={19} />
+
             {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
