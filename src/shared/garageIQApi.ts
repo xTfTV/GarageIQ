@@ -5,7 +5,9 @@ export const IPC_CHANNELS = {
   VEHICLE_BY_ID: 'garageiq:vehicles:by-id',
   SERVICE_TYPES_ALL: 'garageiq:service-types:all',
   SERVICE_TYPE_BY_ID: 'garageiq:service-types:by-id',
-  DATABASE_HEALTH: 'garageiq:database:health'
+  DATABASE_HEALTH: 'garageiq:database:health',
+  USERS_HAS_ACCOUNT: 'garageiq:users:has-account',
+  USERS_REGISTER: 'garageiq:users:register'
 } as const
 
 export interface DatabaseHealth {
@@ -28,4 +30,26 @@ export interface GarageIQApi {
   database: {
     checkHealth(): Promise<DatabaseHealth>
   }
+
+  users: {
+    hasLocalAccount(): Promise<boolean>
+    register(input: RegisterUserRequest): Promise<RegisteredUser>
+  }
+}
+
+export interface RegisterUserRequest {
+  username: string
+  email: string
+  firstName: string
+  lastName: string
+  dob: string
+  password: string
+}
+
+export interface RegisteredUser {
+  userId: number
+  usernamer: number
+  email: string
+  firstName: string
+  lastName: string
 }

@@ -19,6 +19,11 @@ const garageIQApi: GarageIQApi = {
 
   database: {
     checkHealth: () => ipcRenderer.invoke(IPC_CHANNELS.DATABASE_HEALTH)
+  },
+
+  users: {
+    hasLocalAccount: () => ipcRenderer.invoke(IPC_CHANNELS.USERS_HAS_ACCOUNT),
+    register: (input) => ipcRenderer.invoke(IPC_CHANNELS.USERS_REGISTER, input)
   }
 }
 
